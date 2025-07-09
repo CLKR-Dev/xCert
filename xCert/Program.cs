@@ -23,7 +23,7 @@ public class Program
         config.SetApplicationName(GlobalContext.AssemblyName);
         config.SetApplicationVersion(GlobalContext.AssemblyVersion);
 
-        config.AddCommand<PasswordsCommand>("password")
+        config.AddCommand<PasswordCommand>("password")
             .WithDescription("Generates a random password and saves it to a file or prints it to the console.")
             .WithExample("password", "--length", "32", "--out", "password.pwd", "--print")
             .WithExample("password", "--length", "16", "--print");

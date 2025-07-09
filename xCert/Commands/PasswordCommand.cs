@@ -1,7 +1,7 @@
 ﻿namespace xCert.Commands;
 
-public sealed class PasswordsCommand: Command<PasswordsSettings> {
-    public override int Execute(CommandContext context, PasswordsSettings settings) {
+public sealed class PasswordCommand: Command<PasswordSettings> {
+    public override int Execute(CommandContext context, PasswordSettings settings) {
         string password = PasswordsEngine.GeneratePassword(settings.Length);
 
         IOEngine.Write(password).To(settings.FileName);

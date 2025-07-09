@@ -23,5 +23,15 @@ public static class PasswordsEngine {
 
         return new string(password);
     }
+
+    public static (string password, PasswordType type) CheckPassword(string password) {
+        if(string.IsNullOrWhiteSpace(password))
+            return (GeneratePassword(32), PasswordType.Generated);
+        
+        if(IOEngine.CheckAny(password))
+            return (IOEngine.ReadAny(password), PasswordType.Loaded);
+        
+        return (password, PasswordType.Given);
+    }
 }
 

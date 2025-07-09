@@ -1,6 +1,6 @@
 ﻿namespace xCert.Settings;
 
-public class PasswordsSettings: CommandSettings {
+public class PasswordSettings: CommandSettings {
     [Description("Length of the password to generate")]
     [CommandOption("-l|--length")]
     [DefaultValue(32)]

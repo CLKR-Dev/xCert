@@ -4,22 +4,7 @@ using System.Security.Cryptography.X509Certificates;
 namespace xCert.Core.Engines;
 
 public static class CertificatesEngine {
-    public static void GenerateCertificates(string name, string passwordPath, CertificateUseCase useCase) {
-        string password = string.Empty;
-
-        if(string.IsNullOrEmpty(passwordPath)) {
-            // Generate a random password if none is provided
-            password = PasswordsEngine.GeneratePassword(32);
-        }
-        else if(IOEngine.CheckAny(passwordPath)) {
-            // Read password from file if it exists
-            password = IOEngine.ReadAny(passwordPath);
-        }
-        else {
-            // Use the provided password path as the password
-            password = passwordPath;
-        }
-
+    public static (string password, byte[] pfx, byte[] cer ) GenerateCertificates(string name, string password, CertificateUseCase useCase) {
         // Create a new RSA key pair for the certificate
         using var rsa = RSA.Create(2048);
 
@@ -33,9 +18,11 @@ public static class CertificatesEngine {
         var cert = request.CreateSelfSigned(DateTimeOffset.UtcNow, DateTimeOffset.UtcNow.AddYears(5));
 
         // Export the password, certificate and private key to files
-        password.Write().To(name, $"{name}.pwd");
-        cert.Export(X509ContentType.Pfx, password).Write().To(name, $"{name}.pfx");
-        cert.Export(X509ContentType.Cert).Write().To(name, $"{name}.cer");
+        return (
+            password,
+            cert.Export(X509ContentType.Pfx, password),
+            cert.Export(X509ContentType.Cert)
+        );
     }
 
     // Apply the necessary extensions to the certificate request based on the use case
